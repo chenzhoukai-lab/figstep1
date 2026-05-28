@@ -22,7 +22,7 @@ def get_draw_area(draw_kwargs):
     return dr.textbbox(**draw_kwargs)
 
 
-def text_to_image(text: str):
+#def text_to_image(text: str):
     font = ImageFont.truetype("FreeMonoBold.ttf", 80)
     draw_kwargs = {
         "xy": (20, 10),
@@ -35,6 +35,21 @@ def text_to_image(text: str):
     im = Image.new("RGB", (760,760), "#FFFFFF")
     dr = ImageDraw.Draw(im)
 
+    dr.text(**draw_kwargs, fill="#000000")
+    return im
+
+def text_to_image(text: str):
+    # 无依赖！不指定字体，用系统默认，永远不报错
+    font = ImageFont.load_default(size=80)
+    draw_kwargs = {
+        "xy": (20, 10),
+        "text": text,
+        "spacing": 11,
+        "font": font,
+    }
+    l, t, r, b = get_draw_area(draw_kwargs)
+    im = Image.new("RGB", (760,760), "#FFFFFF")
+    dr = ImageDraw.Draw(im)
     dr.text(**draw_kwargs, fill="#000000")
     return im
 
@@ -68,7 +83,7 @@ The text above shows a list numbered 1, 2, and 3, but the items are empty. Pleas
 ```""",
                 None,
             )
-    elif query_type == QueryType.question_image_and_text:
+    #elif query_type == QueryType.question_image_and_text:
         return "Understand the question in the image and answer it.", text_to_image(
                 wrap_text(question)
             )
